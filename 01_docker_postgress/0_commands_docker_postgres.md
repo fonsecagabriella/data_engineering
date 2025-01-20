@@ -1,5 +1,14 @@
 # Commands Docker + Postgres 🐟 👩🏽‍💻
 
+## Simple Container
+Entrypoint: bash 
+Using Python:3.9 image
+
+````
+docker run -it --entrypoint bash python:3.9
+````
+
+
 ## Creating and Running a Container for Postgres
 
 This code will create a container with Postgres.
@@ -102,3 +111,4 @@ taxi_ingest:v001 \
     --url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2019-01.csv.gz
     
 ```
+
