@@ -59,6 +59,8 @@ resource "google_storage_bucket" "data-lake-bucket" {
 - `Apply` - Do what is in the tf files.
 - `Destroy` - Remove everything defined in the tf files.
 
+`terraform apply -auto-approve` is used to generate the proposed changes and apply them automatically without requiring confirmation.
+
 ---
 
 ## Useful Terraform

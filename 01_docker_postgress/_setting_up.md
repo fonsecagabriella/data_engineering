@@ -146,6 +146,7 @@ A registry is like a cookbook store where you keep and share your recipes (image
 - `docker rm container`: Removes a container.
 - `docker system prune -f`: Stops all running containers, removes unused networks, and frees allocated ports.
 - `docker-compose down`: Kills Docker Compose.
+- `docker start -i <id>`: Starts container from an image based on <id>
 
 ## Connect to POSTGRES with pgcli
 
