@@ -36,7 +36,8 @@ def main(params):
 
     df.to_sql(name=table_name, con=engine, if_exists="append")
 
-    while True:
+while True:
+    try:
         t_start = time()
         df = next(df_iter)
 
@@ -49,6 +50,10 @@ def main(params):
         t_end = time()
 
         print("another row inserted, took %.3f seconds" % (t_end - t_start))
+
+    except StopIteration:
+        print("No more data to process. Exiting loop.")
+        break
 
 
 
