@@ -1,5 +1,7 @@
 # Setting Up The Environment
 
+<img src="../images/set_up.png" width="70%">
+
 **You need to:**
 1. Get a GitHub Account and install VSCode, connecting both (*maybe obvious step*)
 2. Install Brew (*I like having al my packages managed by brew, not a requirement, but can make it easier*)
