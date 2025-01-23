@@ -61,6 +61,7 @@ The containers can communicate with each other using their service names as host
 
 >> 104,802; 198,924; 109,603; 27,678; 35,189
 
+
 ````
 SELECT 
 	COUNT(1)
@@ -69,9 +70,9 @@ FROM
 WHERE
 	CAST(t.lpep_pickup_datetime AS DATE) >= '2019-10-01' AND 
     CAST(t.lpep_pickup_datetime AS DATE) <= '2019-10-31' AND
+	CAST(t.lpep_dropoff_datetime AS DATE) >= '2019-10-01' AND
 	CAST(t.lpep_dropoff_datetime AS DATE) <= '2019-10-31' AND
-	CAST(t.lpep_dropoff_datetime AS DATE) <= '2019-10-31' AND
-	t.trip_distance <=1
+	t.trip_distance 
 ````
 
 
