@@ -7,6 +7,7 @@
 
 - [All the flows](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main/02-workflow-orchestration/flows)
 - Run `docker-compose up --build` in the main container for Kestra; Then go to db folder and run it again for db + pgadmin
+- [Good notes from fellow coursemate](https://github.com/ManuelGuerra1987/data-engineering-zoomcamp-notes/blob/main/2_Workflow-Orchestration-(Kestra)/README.md)
 
 ## Kestra
 
