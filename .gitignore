@@ -220,3 +220,6 @@ terraform.rc
 # Ignore CLI configuration files
 *.json
 */keys/*
+
+# DB files
+.parquet

@@ -150,5 +150,5 @@ OPTIONS(
 - Filter on partitioned columns
 - Denormalise data
 - Use nested or repeated columns
-- Reduce data before using `JOIN``
-- Place the table with the largest number of rows first followed by the tables with the fewest ros, and then place the remaning tables by decreasing size.
+- Reduce data before using `JOIN`
+- Place the table with the largest number of rows first followed by the tables with the fewest rows, and then place the remaning tables by decreasing size.
