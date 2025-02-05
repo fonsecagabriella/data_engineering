@@ -1,4 +1,4 @@
-# Data Warehouse and BigQuery
+# Data Warehouse and BigQuery 👩🏽‍💻
 
 1. [OLTP x OLAP x Data Warehouse](#oltp-x-olap-x-data-warehouse)
    - [In Summary](#in-summary)
@@ -9,14 +9,26 @@
    - [OLAP (Online Analytical Processing)](#olap-online-analytical-processing)
    - [Data Warehouse](#data-warehouse)
 
-2. [Partitioning vs Clustering](#partioning-vs-clustering)
-   - [Partitioning](#partition)
-   - [Clustering](#clustering)
-
-3. [BigQuery](#bigquery)
+2. [BigQuery](#bigquery)
    - [Best Practices](#best-practices)
      - [Cost Reduction](#cost-reduction)
      - [Improve Query Performance](#improve-query-performance)
+
+3. [Partitioning vs Clustering](#partitioning-vs-clustering)
+   - [Partitioning](#partitioning)
+   - [Clustering](#clustering)
+   - [Comparison Table](#comparison-table)
+   - [When to Use Partitioning & Clustering Together](#when-to-use-partitioning--clustering-together)
+
+4. [Difference Between Regular, Materialized, and External Tables in BigQuery](#difference-between-regular-materialized-and-external-tables-in-bigquery)
+   - [Regular Table](#regular-table)
+   - [Materialized Table](#materialized-table)
+   - [External Tables in BigQuery](#external-tables-in-bigquery)
+   - [Pros & Cons of External Tables](#pros--cons-of-external-tables)
+
+
+----
+
 
 
 ## 1. OLTP x OLAP x Data Warehouse
@@ -93,37 +105,7 @@ Central repository that aggregates, organizes, and stores historical data for an
 
 -----------
 
-
-## 2. Partioning vs Clustering
-
-| **Feature**       | **Partitioning**                                 | **Clustering**                                    |
-|--------------------|--------------------------------------------------|--------------------------------------------------|
-| **Granularity**    | Divides the table into independent partitions.   | Organizes data within the table (or partition).  |
-| **Key Columns**    | Focuses on one partitioning column (or criteria).| Focuses on one or more clustering columns.       |
-| **Storage**        | Creates separate physical storage for partitions.| No separate storage; organizes data internally.  |
-| **Use Case**       | Filters on partitioning column (e.g., date).     | Filters or aggregates on clustering columns.     |
-| **Benefit**        | Reduces query cost by skipping entire partitions.| Reduces data scanned within partitions or table. |
-
-
-### **Partition**
-Partitioning divides a table into smaller, manageable segments (called partitions) based on the values in one or more columns. It allows queries to scan only relevant partitions, improving performance for queries that filter on the partitioned column(s).
-
-
-- The icone for partitioned and non-partitioned data is different (the one for partitioned has a little bar)
-<img src="../images/partioned-non.png" width="90%">
-
-### **Clustering**
-Clustering organizes data within a table (or partition) based on the values in one or more columns. It stores similar rows together physically, reducing the amount of data scanned during queries.
-
-
-- The order of the columns matter for performance
-- Clustering improves filter and aggrehgate queries
-- You can specify up to for
-- Useful for big tables (> 1GB)
-
----------------
-
-## 3. BigQuery
+## 4. BigQuery
 - Serverless datawarehouse
 - Software as well as infrastructure including scalability and high-availability 
 - Uses column oriented structured
@@ -152,3 +134,127 @@ OPTIONS(
 - Use nested or repeated columns
 - Reduce data before using `JOIN`
 - Place the table with the largest number of rows first followed by the tables with the fewest rows, and then place the remaning tables by decreasing size.
+
+
+
+----
+
+
+
+## 3. Partioning vs Clustering
+
+| **Feature**       | **Partitioning**                                 | **Clustering**                                    |
+|--------------------|--------------------------------------------------|--------------------------------------------------|
+| **How it works**   | Divides the table into independent partitions.   | Organizes data within the table (or partition).  |
+| **Key Columns**    | Focuses on one partitioning column (or criteria).| Focuses on one or more clustering columns.       |
+| **Best for**       | Date-based queries                               | Filtering, sorting, or grouping on specific columns |
+| **Column types**   | Date or Timestamp columns                        | Low-cardinality columns (e.g., region, category) |
+| **Storage**        | Creates separate physical storage for partitions.| No separate storage; organizes data internally.  |
+| **Use Case**       | Filters on partitioning column (e.g., date).     | Filters or aggregates on clustering columns.     |
+| **Benefit**        | Reduces query cost by skipping entire partitions.| Reduces data scanned within partitions or table. |
+| **Improves performance?** | ✅ Yes, by scanning only relevant partitions | ✅ Yes, by reducing scanned bytes within partitions |
+| **Reduces cost?**  | ✅ Yes, fewer scanned bytes                      | ✅ Yes, especially for frequent filters        |
+| **Can be combined?** | ✅ Yes                                        | ✅ Yes                                         |
+
+
+
+
+### **Partition**
+Partitioning divides a table into smaller, manageable segments (called partitions) based on the values in one or more columns. It allows queries to scan only relevant partitions, improving performance for queries that filter on the partitioned column(s).
+
+
+- The icone for partitioned and non-partitioned data is different (the one for partitioned has a little bar)
+<img src="../images/partioned-non.png" width="90%">
+
+### **Clustering**
+Clustering organizes data within a table (or partition) based on the values in one or more columns. It stores similar rows together physically, reducing the amount of data scanned during queries.
+
+
+- The order of the columns matter for performance
+- Clustering improves filter and aggrehgate queries
+- You can specify up to for
+- Useful for big tables (> 1GB)
+
+**When Clustering is NOT Necessary or Useful:**
+❌ Small tables (<1GB)
+The overhead of maintaining clustering is not worth it for small tables.
+
+❌ High-cardinality columns (too many unique values)
+Clustering on a column like user_id with millions of unique values may not provide significant performance gains.
+
+❌ Queries do not filter, sort, or aggregate on the clustering column
+If queries rarely use WHERE, ORDER BY, or GROUP BY on the clustering column, the benefits of clustering will not be realized.
+
+
+### When to Use Partitioning & Clustering Together?
+If queries filter by date and another column, use both.
+
+Example:
+- Partition by `event_date`
+- Cluster by `customer_id`
+
+This speeds up queries that filter by date AND customer ID.
+
+**If unsure, start with partitioning (it's more impactful on query performance and cost). Add clustering later if additional optimization is needed.**
+
+---------------
+
+
+
+## 4. Difference Between Regular, Materialized and External Tables in BigQuery
+
+| Feature | Regular Table | Materialized Table (View) |
+|---|---|---|
+| Storage | Stores full data | Stores precomputed query results |
+| Performance | Slower, queries scan the table | Faster, queries use precomputed results |
+| Refresh | Must be manually updated | Automatically updates when source changes |
+| Use Case | Storing raw or cleaned data | Improving query speed for frequent queries |
+| Cost | Charges for storage & queries | Charges for storage but **reduces** query costs |
+
+### 4.1 Regular Table
+A **regular table** in BigQuery is a standard table where data is stored in a structured format. It is queried directly from storage, meaning every time you run a query, BigQuery scans the data in the table to generate results.
+
+- Data is stored persistently.
+- Queries read from the table every time they are executed.
+- No precomputed results; queries can take longer if scanning large datasets.
+- Good for frequently updated datasets.
+
+```sql
+CREATE OR REPLACE TABLE my_dataset.regular_table AS
+SELECT * FROM my_dataset.source_table;
+```
+
+### 4.2 Materialized Table
+A **materialized** table is a precomputed table that stores the results of a query. Unlike regular tables, materialized tables improve query performance by reducing the amount of data that needs to be scanned.
+
+- Stores precomputed query results.
+- Improves performance for repetitive queries.
+- Requires periodic refresh to stay up-to-date.
+- Reduces query costs by avoiding frequent full table scans.
+
+````sql
+CREATE MATERIALIZED VIEW my_dataset.materialized_table AS
+SELECT customer_id, SUM(total_amount) AS total_spent
+FROM my_dataset.transactions
+GROUP BY customer_id;
+
+````
+
+### 4.3 External Tables in BigQuery
+
+✅ **No Data Duplication** → Data remains in GCS; BigQuery does not copy it.
+✅ **Cost-Efficient** → You don’t pay for storage in BigQuery, only for the query processing.
+✅ **Schema Definition** → You must define the schema, or BigQuery can auto-detect it.
+✅ **Supports Various Formats** → CSV, JSON, Parquet, ORC, and Avro files.
+
+
+**When Should You Use an External Table?**
+- When you don’t want to store large datasets inside BigQuery.
+- When data frequently updates in GCS and you don’t want to reload it into BigQuery.
+- When you only need to run occasional queries on the data.
+
+| Pros ✅ | Cons ❌ |
+|---------|---------|
+| No need to move data into BigQuery | Query performance is slower than internal tables |
+| Saves on storage costs | Cannot be used for clustering or partitioning |
+| Supports various file formats (CSV, JSON, Parquet) | Limited support for certain operations (e.g., updates) |
