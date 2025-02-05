@@ -222,4 +222,4 @@ terraform.rc
 */keys/*
 
 # DB files
-.parquet
+*.parquet
