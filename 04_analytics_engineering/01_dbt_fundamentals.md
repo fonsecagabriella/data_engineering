@@ -15,4 +15,4 @@ blue node: you create in DBT
 `dbt test` tests the models while they are being built
 `dbd docs generate` 
 
-## dbd Cloud and BigQuery
+## dbd Cloud and BigQuery 
