@@ -1,5 +1,7 @@
 # Analytics Engineering
 
+https://github.com/ManuelGuerra1987/data-engineering-zoomcamp-notes/blob/main/4_Analytics-Engineering/README.md
+
 ## Roles
 *Data Engineer* Prepares and maintain the infrastructure the data team needs
 *Analytics Engineer* Introduces the good software engineering practices to the efforts of data analysts and data scientist
