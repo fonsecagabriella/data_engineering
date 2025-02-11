@@ -225,3 +225,6 @@ terraform.rc
 *.parquet
 
 */taxi_zone_lookup.csv
+
+# Virtual Environment
+__my_venv/*
