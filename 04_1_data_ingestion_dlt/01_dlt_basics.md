@@ -2,7 +2,7 @@
 
 ## What is DLT?
 
-Data Loading Tool (DLT) is an open-source Python library designed to streamline the process of loading data from various sources into well-structured, live datasets. It offers a lightweight interface for extracting data from REST APIs, SQL databases, cloud storage, and Python data structures. DLT is designed to be easy to use, flexible, and scalable. 
+[Data Loading Tool (DLT)](https://github.com/dlt-hub/dlt) is an open-source Python library designed to streamline the process of loading data from various sources into well-structured, live datasets. It offers a lightweight interface for extracting data from REST APIs, SQL databases, cloud storage, and Python data structures. DLT is designed to be easy to use, flexible, and scalable. 
 
 ## Key Features of DLT
 
@@ -16,10 +16,10 @@ Data Loading Tool (DLT) is an open-source Python library designed to streamline 
 
 Before you begin, ensure you have the following:
 
-- **Python 3.7 or later**: DLT is compatible with Python versions 3.7 and above.
+- **Python 3.9 or later**
 - **Virtual Environment (Recommended)**: It's advisable to use a virtual environment to manage dependencies.
 
-## Step 1: Install DLT with support for DuckDB (a lightweight db)
+## Step 01: Install DLT with support for DuckDB (a lightweight db)
 
 Install DLT using pip:
 
@@ -29,7 +29,7 @@ pip install dlt[duckdb]
 
 *Ps: you need to use ""  to pip install via shell zhs*
 
-## Step 2:  Initialize a New DLT Project
+## Step 02:  Initialize a New DLT Project
 ````
 dlt init <project_name> <destination>
 ````
