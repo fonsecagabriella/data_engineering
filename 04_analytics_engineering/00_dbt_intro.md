@@ -1,6 +1,8 @@
 
 # Analytics Engineering
 
+📝 Notes by [Manuel Guerra](https://github.com/ManuelGuerra1987)
+
 ### Table of contents
 
 - [Introduction to analytics engineering](#Introduction-to-analytics-engineering)
