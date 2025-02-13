@@ -72,14 +72,14 @@ This is the query for the Table:
 
 ````sql
 
-SELECT DISTINCT COUNT(PULocationID) FROM `your_project_id.your_dataset_name.yellow_tripdata_2024
+SELECT COUNT(DISTINCT PULocationID) FROM `your_project_id.your_dataset_name.yellow_tripdata_2024
 ````
 
 
 This is the query for the External table:
 
 ````sql
-SELECT DISTINCT COUNT(PULocationID) FROM `your_project_id.your_dataset_name.yellow_tripdata_external`
+SELECT COUNT(DISTINCT PULocationID) FROM `your_project_id.your_dataset_name.yellow_tripdata_external`
 ````
 
 ---
