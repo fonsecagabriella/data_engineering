@@ -69,5 +69,6 @@ Considering the data lineage below and that taxi_zone_lookup is the only materia
 
 Select the option that does NOT apply for materializing `fct_taxi_monthly_zone_revenue`:
 
-----
+---- 
 
+**04: f** 
