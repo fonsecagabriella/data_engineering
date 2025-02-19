@@ -1,3 +1,2 @@
-*.csv filter=lfs diff=lfs merge=lfs -text
 taxi_data/* filter=lfs diff=lfs merge=lfs -text
 ny_taxi_post_postgres_data/* filter=lfs diff=lfs merge=lfs -text
