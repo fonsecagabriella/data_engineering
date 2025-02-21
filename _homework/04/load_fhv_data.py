@@ -43,15 +43,15 @@ def download_fhv_data(file_name):
 
         # Rename columns if necessary
         if "PUlocationID" in df.columns:
-            df.rename(columns={"PUlocationID": "p_ulocation_id"}, inplace=True)
+            df.rename(columns={"PUlocationID": "pu_location_id"}, inplace=True)
         if "DOlocationID" in df.columns:
-            df.rename(columns={"DOlocationID": "d_olocation_id"}, inplace=True)
+            df.rename(columns={"DOlocationID": "do_location_id"}, inplace=True)
 
         # Ensure columns exist before modifying
-        if "p_ulocation_id" in df.columns:
-            df["p_ulocation_id"] = df["p_ulocation_id"].fillna(0).astype(int)
-        if "d_olocation_id" in df.columns:
-            df["d_olocation_id"] = df["d_olocation_id"].fillna(0).astype(int)
+        if "pu_location_id" in df.columns:
+            df["pu_location_id"] = df["pu_location_id"].fillna(0).astype(int)
+        if "do_location_id" in df.columns:
+            df["do_location_id"] = df["do_location_id"].fillna(0).astype(int)
 
         # Upload to GCS
         upload_to_gcs(df, file_name)

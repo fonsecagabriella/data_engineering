@@ -17,6 +17,11 @@ You can do this via shell with `export GOOGLE_APPLICATION_CREDENTIALS="<YOUR_KEY
 5. Run the scripts [`load_green_data.py`](load_green_data.py), [`load_yellow_data.py](load_yellow_data.py),  [`load_fhv_data`](load_fhv_data.py).
 These scripts use dlt to download the files to a bucket, and later transform them into schemas in bigquery.
 
+6. Now you are ready to go to dbt and build your models.
+Follow the instructions from the lessons and build them according to [these files](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/04-analytics-engineering/taxi_rides_ny/models/staging).
+*Note*: Make sure your table columns in BigQuery match your code in the stage models. If you're following this, you will need to adapt the stage model files above, or [use these ones](../../04_analytics_engineering/taxi_rides_ny/models/). This is because I didn't treat them *accordinly* and I don't want to upload the data all again 🙈. 
+
+7. If you run your models and everything works great, then you can run them without the test mode: `dbt build --vars '{'is_test_run': 'false'}'`
 
 ---
 
