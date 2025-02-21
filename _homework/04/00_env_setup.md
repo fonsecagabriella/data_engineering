@@ -14,7 +14,7 @@ You can do this via shell with `export GOOGLE_APPLICATION_CREDENTIALS="<YOUR_KEY
 
 4. You might also need to install the following: `pip install google-cloud-bigquery-storage`
 
-5. Run the scripts [`load_green_data.py`](load_green_data.py), [`load_fhv_data`](load_fhv_data.py).
+5. Run the scripts [`load_green_data.py`](load_green_data.py), [`load_yellow_data.py](load_yellow_data.py),  [`load_fhv_data`](load_fhv_data.py).
 These scripts use dlt to download the files to a bucket, and later transform them into schemas in bigquery.
 
 
