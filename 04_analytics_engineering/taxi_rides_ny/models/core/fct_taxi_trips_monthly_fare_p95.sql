@@ -10,7 +10,7 @@ WITH filtered_trips AS (
     WHERE 
         fare_amount > 0 
         AND trip_distance > 0 
-        AND payment_type_description IN ('Cash', 'Credit Card')
+        AND payment_type_description IN ('Cash', 'Credit card')
 ),
 
 percentile_fares AS (
@@ -18,11 +18,12 @@ percentile_fares AS (
         service_type,
         year,
         month,
-        APPROX_QUANTILES(fare_amount, 100)[SAFE_OFFSET(97)] AS fare_p97,
-        APPROX_QUANTILES(fare_amount, 100)[SAFE_OFFSET(95)] AS fare_p95,
-        APPROX_QUANTILES(fare_amount, 100)[SAFE_OFFSET(90)] AS fare_p90
+        PERCENTILE_CONT(fare_amount, 0.97) OVER (PARTITION BY service_type, year, month) AS fare_p97,
+        PERCENTILE_CONT(fare_amount, 0.95) OVER (PARTITION BY service_type, year, month) AS fare_p95,
+        PERCENTILE_CONT(fare_amount, 0.90) OVER (PARTITION BY service_type, year, month) AS fare_p90
     FROM filtered_trips
-    GROUP BY 1, 2, 3
 )
 
-SELECT * FROM percentile_fares
+SELECT DISTINCT service_type, year, month, fare_p97, fare_p95, fare_p90
+FROM percentile_fares
+
