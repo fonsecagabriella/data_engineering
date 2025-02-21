@@ -228,3 +228,6 @@ terraform.rc
 
 # Virtual Environment
 __my_venv/*
+
+# .csv.gz files
+*.csv.gz

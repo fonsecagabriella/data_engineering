@@ -1,8 +1,10 @@
 # Homework - Week 04
 
+**NOTE: All the steps performed to download the datasets for this week are described [here](00_env_setup.md)
+
+-------
+
 **01: Understanding dbt model resolution**
-
-
 Provided you've got the following sources.yaml
 
 ```yaml
