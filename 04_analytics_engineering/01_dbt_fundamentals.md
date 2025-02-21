@@ -68,7 +68,7 @@ blue node: you create in DBT (core)
 
 `dbt test` tests the models while they are being built
 
-`dbd docs generate` generates docs, locally or on cloud
+`dbt docs generate` generates docs, locally or on cloud
 
 `dbt build --select +fact_trips.sql+ --vars '{is_test_run: false}'` command with a variable that be manipulated
 
