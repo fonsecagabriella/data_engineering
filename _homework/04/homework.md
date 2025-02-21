@@ -288,11 +288,9 @@ The result makes sense, considering we had COVID during the period.
 
 Now, what are the values of `p97`, `p95`, `p90` for Green Taxi and Yellow Taxi, in April 2020?
 
-- green: {p97: 55.0, p95: 45.0, p90: 26.5}, yellow: {p97: 52.0, p95: 37.0, p90: 25.5}
-- green: {p97: 55.0, p95: 45.0, p90: 26.5}, yellow: {p97: 31.5, p95: 25.5, p90: 19.0}
-- green: {p97: 40.0, p95: 33.0, p90: 24.5}, yellow: {p97: 52.0, p95: 37.0, p90: 25.5}
-- green: {p97: 40.0, p95: 33.0, p90: 24.5}, yellow: {p97: 31.5, p95: 25.5, p90: 19.0}
-- green: {p97: 55.0, p95: 45.0, p90: 26.5}, yellow: {p97: 52.0, p95: 25.5, p90: 19.0}
+
+>> - green: {p97: 55.0, p95: 45.0, p90: 26.5}, yellow: {p97: 31.5, p95: 25.5, p90: 19.0}
+
 
 
 ### Question 7: Top #Nth longest P90 travel time Location for FHV
@@ -307,10 +305,41 @@ Now...
 2. For each record in `dim_fhv_trips.sql`, compute the [timestamp_diff](https://cloud.google.com/bigquery/docs/reference/standard-sql/timestamp_functions#timestamp_diff) in seconds between dropoff_datetime and pickup_datetime - we'll call it `trip_duration` for this exercise
 3. Compute the **continous** `p90` of `trip_duration` partitioning by year, month, pickup_location_id, and dropoff_location_id
 
+*Explanation*
+🔹 **Extract Year & Month** → Since we need to group by year and month, we use `EXTRACT(YEAR FROM pickup_datetime)` and `EXTRACT(MONTH FROM pickup_datetime)`.
+🔹 **Compute trip_duration** → We use `TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND)` to get the duration in seconds.
+🔹 **Partition by the required fields** → `PERCENTILE_CONT(trip_duration, 0.90) OVER (PARTITION BY year, month, pickup_location_id, dropoff_location_id)` ensures that we compute the continuous 90th percentile for each group.
+🔹 **Remove duplicates with DISTINCT** → Since `PERCENTILE_CONT` is a window function, we select only distinct results.
+
 For the Trips that **respectively** started from `Newark Airport`, `SoHo`, and `Yorkville East`, in November 2019, what are **dropoff_zones** with the 2nd longest p90 trip_duration ?
 
+Run in bigquery:
+```sql
+WITH ranked_trips AS (
+    SELECT 
+        pz.zone AS pickup_zone,
+        dz.zone AS dropoff_zone,
+        t.travel_time_p90,
+        ROW_NUMBER() OVER (
+            PARTITION BY pz.zone
+            ORDER BY t.travel_time_p90 DESC
+        ) AS trip_rank
+    FROM peppy-plateau-447914-j6.zoomcamp_dbt_transformations.fct_fhv_monthly_zone_traveltime_p90 t
+    JOIN peppy-plateau-447914-j6.zoomcamp_dbt_transformations.dim_zones pz ON t.pickup_locationid = pz.locationid
+    JOIN peppy-plateau-447914-j6.zoomcamp_dbt_transformations.dim_zones dz ON t.dropoff_locationid = dz.locationid
+    WHERE 
+        t.year = 2019 
+        AND t.month = 11
+        AND pz.zone IN ('Newark Airport', 'SoHo', 'Yorkville East')
+)
+
+SELECT 
+    pickup_zone, 
+    dropoff_zone, 
+    travel_time_p90
+FROM ranked_trips
+WHERE trip_rank = 2;
+```
+
 - LaGuardia Airport, Chinatown, Garment District
-- LaGuardia Airport, Park Slope, Clinton East
-- LaGuardia Airport, Saint Albans, Howard Beach
-- LaGuardia Airport, Rosedale, Bath Beach
-- LaGuardia Airport, Yorkville East, Greenpoint
+
