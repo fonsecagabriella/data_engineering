@@ -66,7 +66,7 @@ def load_data_into_bigquery():
     print("🚀 Starting to load data into BigQuery...")  # Signal before loading data
     
     pipeline = dlt.pipeline(
-        pipeline_name="fhv_pipeline",
+        pipeline_name="fhv_pipeline_n",
         destination="bigquery",
         dataset_name=DATASET_NAME
     )

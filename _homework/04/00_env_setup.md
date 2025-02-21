@@ -1,5 +1,7 @@
 # Homework week 04: DOWNLOADING THE DATASETS & SETTING UP
 
+**NOTE** FIX TYPOS
+
 To be able to download the datasets and setup the environment for the homework for this week, I performed the following steps. I am assuming you have a GCS account, with a bucket setup and the necessary permissions. The steps below will generate a clean environment only with the DS for this week, using dlt for data loading and dbt for further transformation.
 
 -----
