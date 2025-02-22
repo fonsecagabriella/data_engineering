@@ -1,5 +1,58 @@
 # DBT Fundamentals
 
+
+## INDEX 📝
+
+1.  **Vocabulary**
+    * [DAG (Directed Acyclic Graph)](#vocabulary)
+2.  **Overview of a project**
+    * [Lineage Graph Explanation](#overview-of-a-project)
+    * [Green Nodes (Raw Data)](#overview-of-a-project)
+    * [Blue Nodes (DBT Created)](#overview-of-a-project)
+3.  **dbt Project Structure Summary**
+    * [Staging Models (`/staging/`)](#1-staging-models-staging)
+        * [Purpose](#1-staging-models-staging)
+        * [Characteristics](#1-staging-models-staging)
+        * [Examples](#1-staging-models-staging)
+        * [Location in Lineage Graph](#1-staging-models-staging)
+    * [Core Models (`/core/`)](#2-core-models-core)
+        * [Purpose](#2-core-models-core)
+        * [Characteristics](#2-core-models-core)
+        * [Examples](#2-core-models-core)
+        * [Location in Lineage Graph](#2-core-models-core)
+    * [Seed Files (`/seeds/`)](#3-seed-files-seeds)
+        * [Purpose](#3-seed-files-seeds)
+        * [Characteristics](#3-seed-files-seeds)
+        * [Examples](#3-seed-files-seeds)
+        * [Location in Lineage Graph](#3-seed-files-seeds)
+4.  **Simple commands**
+    * [`dbt run`](#simple-commands)
+    * [`dbt test`](#simple-commands)
+    * [`dbt docs generate`](#simple-commands)
+    * [`dbt build --select +fact_trips.sql+ --vars '{is_test_run: false}'`](#simple-commands)
+5.  **dbt run vs. dbt build**
+    * [`dbt run` Explanation](#dbt-run-vs-dbt-build)
+    * [`dbt build` Explanation](#dbt-run-vs-dbt-build)
+    * [Key Differences](#dbt-run-vs-dbt-build)
+    * [Simple Terms Summary](#dbt-run-vs-dbt-build)
+6.  **Building Up to a Specific Node in dbt (run or build)**
+    * [Key Points ( `+` prefix, `+` suffix, `--exclude`)](#building-up-to-a-specific-node-in-dbt-run-or-build)
+    * [Build with Dependencies](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+    * [Build Only the Node](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+    * [Build Node and Immediate Children](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+    * [Build Nodes in a Directory](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Build Nodes in a Directory with Downstream Dependencies](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+    * [Exclude Nodes](#building-up-to-a-specific-node-in-dbt-run-or-build)
+        * [Command and Example](#building-up-to-a-specific-node-in-dbt-run-or-build)
+
+-----
+
+
 ## Vocabulary
 
 - **DAG:** Directed Acyclic Graph. A DAG is just a **way to organize tasks (like cooking or transforming data) so that they happen in the right order**, without any repeating steps. It's like a flowchart for your data.

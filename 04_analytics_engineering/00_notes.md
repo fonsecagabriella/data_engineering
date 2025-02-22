@@ -1,6 +1,49 @@
 # Analytics Engineering
 
-https://github.com/ManuelGuerra1987/data-engineering-zoomcamp-notes/blob/main/4_Analytics-Engineering/README.md
+## INDEX 📝
+
+1.  **Roles**
+    * [Data Engineer](#roles)
+    * [Analytics Engineer](#roles)
+    * [Data Analyst](#roles)
+2.  **Tools**
+    * [Data Loading](#tools)
+    * [Data Storing](#tools)
+    * [Data Modelling](#tools)
+    * [Data Presentation](#tools)
+    * [Examples of tools](#tools)
+        * [Data Storing](#tools)
+        * [Data Modeling](#tools)
+        * [Data Presentation](#tools)
+3.  **Basics of Analytics Engineering**
+    * [REVIEW ETL vs ELT](#basics-of-analytics-engineering)
+    * [Elements of Dimensional Modeling](#basics-of-analytics-engineering)
+        * [FACTS TABLES](#basics-of-analytics-engineering)
+        * [DIMENSIONS TABLES](#basics-of-analytics-engineering)
+    * [Architecture of Dimensional Modeling](#basics-of-analytics-engineering)
+        * [STAGE AREA](#basics-of-analytics-engineering)
+        * [PROCESSING DATA](#basics-of-analytics-engineering)
+        * [PRESENTATION AREA](#basics-of-analytics-engineering)
+4.  **DBT (Data Build Tool)**
+    * [DBT Overview](#dbt-data-build-tool)
+    * [How it Works](#dbt-data-build-tool)
+        * [Raw Data → Clean Data](#dbt-data-build-tool)
+        * [SQL-Based](#dbt-data-build-tool)
+        * [Version Control & Documentation](#dbt-data-build-tool)
+        * [Modular & Reusable](#dbt-data-build-tool)
+        * [Works with Data Warehouses](#dbt-data-build-tool)
+5.  **Example: dbt Transformation**
+    * [Scenario](#example-dbt-transformation)
+    * [1️⃣ Raw Data (`raw_orders` Table)](#example-dbt-transformation)
+    * [2️⃣ dbt Model (Transformation)](#example-dbt-transformation)
+    * [3️⃣ Final Cleaned Table (`cleaned_orders`)](#example-dbt-transformation)
+    * [How dbt Helps](#example-dbt-transformation)
+        * [Data Cleaning](#example-dbt-transformation)
+        * [Standardization](#example-dbt-transformation)
+        * [Automation](#example-dbt-transformation)
+
+
+--------
 
 ## Roles
 *Data Engineer* Prepares and maintain the infrastructure the data team needs
