@@ -2,7 +2,25 @@
 
 **NOTE: All the steps performed to download the datasets for this week are described [here](00_env_setup.md)
 
+## Index
+
+- [**01: Understanding dbt model resolution**](#question-1)
+
+- [**02: dbt Variables & Dynamic Models**](#question-2)
+
+- [**03: dbt Data Lineage and Execution**](#question-3)
+
+- [**04: dbt Macros and Jinja**](#question-4)
+
+- [**05: Taxi Quarterly Revenue Growth**](#question-5)
+
+- [**06: Taxi Quarterly Revenue Growth**](#question-6)
+
+- [**07: Top #Nth longest P90 travel time Location for FHV**](#question-7)
+
+
 -------
+<a id="question-1"></a>
 
 **01: Understanding dbt model resolution**
 Provided you've got the following sources.yaml
@@ -39,6 +57,8 @@ What does this .sql model compile to?
 
 ---
 
+<a id="question-2"></a>
+
 **02: dbt Variables & Dynamic Models**
 
 Say you have to modify the following dbt_model `(fct_recent_taxi_trips.sql)` to enable Analytics Engineers to dynamically control the date range.
@@ -63,8 +83,9 @@ What would you change to accomplish that in a such way that command line argumen
 - `"30"`: If neither is found, it defaults to 30 days.
 
 ----
-
+<a id="question-3"></a>
 **03: dbt Data Lineage and Execution**
+
 >> `dbt run --select models/staging/+`
 
 Considering the data lineage below and that taxi_zone_lookup is the only materialization build (from a .csv seed file):
@@ -93,6 +114,7 @@ Since `fct_taxi_monthly_zone_revenue` is in `core/`, this option does NOT apply.
 
 ---- 
 
+<a id="question-4"></a>
 **04: dbt Macros and Jinja**
 
 Consider you're dealing with sensitive data (e.g.: [PII](https://en.wikipedia.org/wiki/Personal_data)), that is **only available to your team and very selected few individuals**, in the `raw layer` of your DWH (e.g: a specific BigQuery dataset or PostgreSQL schema), 
@@ -131,12 +153,13 @@ That all being said, regarding macro above, **select all statements that are tru
 - When using `staging`, it materializes in the dataset defined in `DBT_BIGQUERY_STAGING_DATASET`, or defaults to `DBT_BIGQUERY_TARGET_DATASET`
 
 -----
+<a id="question-5"></a>
 
 **05: Taxi Quarterly Revenue Growth**
 
 **1. Create a new model `fct_taxi_trips_quarterly_revenue.sql`**
 
-- First, we will go to dbt and edit the file `dm_monthly_zone_revenue` by adding new date formats, to help our calculations. Don't forget to add the `group by` at the end.
+- First, we will go to dbt and edit the file [`dm_monthly_zone_revenue`](../../04_analytics_engineering/taxi_rides_ny/models/core/dm_monthly_zone_revenue.sql) by adding new date formats, to help our calculations. Don't forget to add the `group by` at the end.
 
 ```sql
 {{ config(materialized='table') }}
@@ -146,16 +169,16 @@ with trips_data as (
         EXTRACT(YEAR FROM pickup_datetime) AS year,
         EXTRACT(QUARTER FROM pickup_datetime) AS quarter,
         EXTRACT(MONTH FROM pickup_datetime) AS month,
-        CONCAT(EXTRACT(YEAR FROM pickup_datetime), '/Q', EXTRACT(QUARTER FROM pickup_datetime)) AS year_quarter 
-        
+        CONCAT(EXTRACT(YEAR FROM pickup_datetime), '/Q', EXTRACT(QUARTER FROM pickup_datetime)) AS year_quarter
+
     from {{ ref('fact_trips') }}
 )
     select 
-    -- Reveneue grouping 
+    -- Reveneue grouping
     pickup_zone as revenue_zone,
-    {{ dbt.date_trunc("month", "pickup_datetime") }} as revenue_month, 
+    {{ dbt.date_trunc("month", "pickup_datetime") }} as revenue_month,
 
-    service_type, 
+    service_type,
 
     -- Add new date components
     year,
@@ -163,7 +186,7 @@ with trips_data as (
     month,
     year_quarter,
 
-    -- Revenue calculation 
+    -- Revenue calculation
     sum(fare_amount) as revenue_monthly_fare,
     sum(extra) as revenue_monthly_extra,
     sum(mta_tax) as revenue_monthly_mta_tax,
@@ -179,7 +202,7 @@ with trips_data as (
     avg(trip_distance) as avg_monthly_trip_distance
 
     from trips_data
-    group by 1,2,3, 4, 5, 6, 7 
+    group by 1,2,3, 4, 5, 6, 7
 
 ```
 
@@ -197,8 +220,7 @@ with trips_data as (
 ```
 
 
-
-- Since the existing model `dm_monthly_zone_revenue`already unifies and enriches the data, we will use it as a reference instead of staging models:
+- Since the existing model [`dm_monthly_zone_revenue`](../../04_analytics_engineering/taxi_rides_ny/models/core/dm_monthly_zone_revenue.sql) already unifies and enriches the data, we will use it as a reference instead of staging models:
 
 ```sql
 WITH quarterly_revenue AS (
@@ -217,7 +239,7 @@ WITH quarterly_revenue AS (
 **2. Compute the Quarterly Revenues for each year for based on `total_amount`**
 **3. Compute the Quarterly YoY (Year-over-Year) revenue growth**
 
-Append to the file `fct_taxi_trips_quarterly_revenue.sql`:
+Append to the file [`fct_taxi_trips_quarterly_revenue.sql`](../../04_analytics_engineering/taxi_rides_ny/models/core/fct_taxi_trips_quarterly_revenue.sql):
 
 
 ```sql
@@ -244,7 +266,7 @@ yoy_revenue AS (
     FROM quarterly_revenue qr
 )
 
-SELECT 
+SELECT
     year,
     quarter,
     year_quarter,
@@ -253,6 +275,7 @@ SELECT
     prev_year_revenue,     -- Revenue from the same quarter in the previous year
     yoy_growth             -- Correct YoY Growth after aggregation
 FROM yoy_revenue
+
 ```
 
 Our lineage graph will look like this:
@@ -269,21 +292,24 @@ Run in BigQuery:
 
 ```sql
 SELECT yoy_growth, year, quarter, service_type, total_revenue, prev_year_revenue
-FROM `peppy-plateau-447914-j6.dbt_gfonseca.fct_taxi_trips_quarterly_revenue` 
+FROM `your_project.your_schema.fct_taxi_trips_quarterly_revenue` 
 WHERE year=2020
 ORDER BY yoy_growth DESC
-LIMIT 10 
+LIMIT 10
 
 ```
 
 The result makes sense, considering we had COVID during the period.
 
 ----
+<a id="question-6"></a>
 
 **Question 6: P97/P95/P90 Taxi Monthly Fare**
 
-1. Create a new model `fct_taxi_trips_monthly_fare_p95.sql`
+1. Create a new model [`fct_taxi_trips_monthly_fare_p95.sql`](../../04_analytics_engineering/taxi_rides_ny/models/core/fct_taxi_trips_monthly_fare_p95.sql)
+
 2. Filter out invalid entries (`fare_amount > 0`, `trip_distance > 0`, and `payment_type_description in ('Cash', 'Credit Card')`)
+
 3. Compute the **continous percentile** of `fare_amount` partitioning by service_type, year and and month
 
 Now, what are the values of `p97`, `p95`, `p90` for Green Taxi and Yellow Taxi, in April 2020?
@@ -293,27 +319,45 @@ Now, what are the values of `p97`, `p95`, `p90` for Green Taxi and Yellow Taxi, 
 
 
 
-### Question 7: Top #Nth longest P90 travel time Location for FHV
+<img src="./imgs/question_6.png" width="60%">
+
+---
+
+<a id="question-7"></a>
+
+**07: Top #Nth longest P90 travel time Location for FHV**
 
 Prerequisites:
 * Create a staging model for FHV Data (2019), and **DO NOT** add a deduplication step, just filter out the entries where `where dispatching_base_num is not null`
-* Create a core model for FHV Data (`dim_fhv_trips.sql`) joining with `dim_zones`. Similar to what has been done [here](../../../04-analytics-engineering/taxi_rides_ny/models/core/fact_trips.sql)
+
+* Create a core model for FHV Data [`dim_fhv_trips.sql`](../../04_analytics_engineering/taxi_rides_ny/models/core/dim_fhv_trips.sql) joining with `dim_zones`. Similar to what has been done [here](../../04-analytics-engineering/taxi_rides_ny/models/core/fact_trips.sql)
+
 * Add some new dimensions `year` (e.g.: 2019) and `month` (e.g.: 1, 2, ..., 12), based on `pickup_datetime`, to the core model to facilitate filtering for your queries
 
 Now...
-1. Create a new model `fct_fhv_monthly_zone_traveltime_p90.sql`
-2. For each record in `dim_fhv_trips.sql`, compute the [timestamp_diff](https://cloud.google.com/bigquery/docs/reference/standard-sql/timestamp_functions#timestamp_diff) in seconds between dropoff_datetime and pickup_datetime - we'll call it `trip_duration` for this exercise
-3. Compute the **continous** `p90` of `trip_duration` partitioning by year, month, pickup_location_id, and dropoff_location_id
 
-*Explanation*
-🔹 **Extract Year & Month** → Since we need to group by year and month, we use `EXTRACT(YEAR FROM pickup_datetime)` and `EXTRACT(MONTH FROM pickup_datetime)`.
-🔹 **Compute trip_duration** → We use `TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND)` to get the duration in seconds.
-🔹 **Partition by the required fields** → `PERCENTILE_CONT(trip_duration, 0.90) OVER (PARTITION BY year, month, pickup_location_id, dropoff_location_id)` ensures that we compute the continuous 90th percentile for each group.
-🔹 **Remove duplicates with DISTINCT** → Since `PERCENTILE_CONT` is a window function, we select only distinct results.
+1. Create a new model [`fct_fhv_monthly_zone_traveltime_p90.sql`](../../04_analytics_engineering/taxi_rides_ny/models/core/fct_fhv_monthly_zone_traveltime_p90.sql)
+
+2. For each record in `dim_fhv_trips.sql`, compute the [timestamp_diff](https://cloud.google.com/bigquery/docs/reference/standard-sql/timestamp_functions#timestamp_diff) in seconds between dropoff_datetime and pickup_datetime - we'll call it `trip_duration` for this exercise
+
+3. Compute the **continous** `p90` of `trip_duration` partitioning by year, month, pickup_location_id, and dropoff_location_id
 
 For the Trips that **respectively** started from `Newark Airport`, `SoHo`, and `Yorkville East`, in November 2019, what are **dropoff_zones** with the 2nd longest p90 trip_duration ?
 
+
+*Explanation*
+🔹 **Extract Year & Month** → Since we need to group by year and month, we use `EXTRACT(YEAR FROM pickup_datetime)` and `EXTRACT(MONTH FROM pickup_datetime)`.
+
+🔹 **Compute trip_duration** → We use `TIMESTAMP_DIFF(dropoff_datetime, pickup_datetime, SECOND)` to get the duration in seconds.
+
+🔹 **Partition by the required fields** → `PERCENTILE_CONT(trip_duration, 0.90) OVER (PARTITION BY year, month, pickup_location_id, dropoff_location_id)` ensures that we compute the continuous 90th percentile for each group.
+
+🔹 **Remove duplicates with DISTINCT** → Since `PERCENTILE_CONT` is a window function, we select only distinct results.
+
+>> LaGuardia Airport, Chinatown, Garment District
+
 Run in bigquery:
+
 ```sql
 WITH ranked_trips AS (
     SELECT 
@@ -341,5 +385,7 @@ FROM ranked_trips
 WHERE trip_rank = 2;
 ```
 
-- LaGuardia Airport, Chinatown, Garment District
+*Note:* Replace `trip_rank <= 5` to get the 5th values for comparision with the answers.
+
+<img src="./imgs/question_7.png" width="70%">
 
