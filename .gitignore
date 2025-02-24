@@ -233,3 +233,6 @@ __my_venv/*
 *.csv.gz
 05_batch_processing/*.csv.gz
 05_batch_processing/*.csv
+
+# .jar files
+*.jar

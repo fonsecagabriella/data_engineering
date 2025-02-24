@@ -5,6 +5,7 @@
     - [Environment Setup](#env-setup)
     - [Spark Cluster](#spark-cluster)
     - [Repartition](#spark-repartition)
+    - [Spark & GCS] (#spark-gcs)
 2. [Download Green & Yello data](#dowload-data)
 
 
@@ -136,6 +137,13 @@ print(df_repartitioned.rdd.getNumPartitions())  # Output: 4
 - Use **`.coalesce()`** to **reduce** partitions with **minimal shuffling** (faster).
 - Avoid **too many** partitions (overhead) or **too few** (bottlenecks).
 - Aim for **128 MB – 256 MB** of data per partition for **optimal performance**.
+
+---
+
+<a id="spark-gcs"></a>
+
+### 1.4 Spark & Google Cloud
+All the files are [here](./06_spark_gcs.ipynb)
 
 ----
 
