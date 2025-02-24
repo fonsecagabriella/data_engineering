@@ -68,6 +68,7 @@ brew install apache-spark
 ```
 
 After the installation, find the path where its installed:
+
 ```sh
 brew info apache-spark
 ```
