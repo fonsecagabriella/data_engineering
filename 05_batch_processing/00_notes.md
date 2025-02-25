@@ -5,8 +5,8 @@
     - [Environment Setup](#env-setup)
     - [Spark Cluster](#spark-cluster)
     - [Repartition](#spark-repartition)
-    - [Spark & GCS] (#spark-gcs)
-2. [Download Green & Yello data](#dowload-data)
+    - [Spark & GCS](#spark-gcs)
+2. [Download Green & Yellow data](#dowload-data)
 
 
 ----
