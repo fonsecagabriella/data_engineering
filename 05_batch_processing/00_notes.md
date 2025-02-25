@@ -14,8 +14,11 @@
 Different ways for processing data:
 
 - **BATCH:** Processes big chuncks of data in one go, according to a certain granularity (ie. weekly, hourly, 3 times per hours, etc)
+    
     -- ***Technologies:*** Python scripts, SQL, Spark, Flink, etc.
+    
     -- ***Advantages:*** Easier to scale, manage and retry (when there are errors)
+    
     -- ***Disadvantage:*** Delay of processing, the data is not immediately available
 
 
