@@ -90,7 +90,7 @@ What would you change to accomplish that in a such way that command line argumen
 
 Considering the data lineage below and that taxi_zone_lookup is the only materialization build (from a .csv seed file):
 
-<img src="data_lineage.png" width="70%">
+<img src="./imgs/data_lineage.png" width="70%">
 
 Select the option that does NOT apply for materializing `fct_taxi_monthly_zone_revenue`:
 
