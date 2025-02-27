@@ -161,35 +161,46 @@ blue node: you create in DBT (core)
 * These selection principles apply to both dbt run, and dbt build.
 
 **Build with Dependencies:**
-    `dbt build --select +model.node_name` (or `dbt run`)
-    *Builds the specified node and all its upstream dependencies.*
-    - Example: `dbt build --select +model.fct_taxi_monthly_zone_revenue`
+
+`dbt build --select +model.node_name` (or `dbt run`)
+
+*Builds the specified node and all its upstream dependencies.*
+
+- Example: `dbt build --select +model.fct_taxi_monthly_zone_revenue`
 
 **Build Only the Node:**
-    `dbt build --select model.node_name` (or `dbt run`)
-    *Builds only the specified node, excluding dependencies.* 
-    - Example: `dbt build --select model.fct_taxi_monthly_zone_revenue`
+`dbt build --select model.node_name` (or `dbt run`)
+
+*Builds only the specified node, excluding dependencies.*
+
+- Example: `dbt build --select model.fct_taxi_monthly_zone_revenue`
 
 **Build Node and Immediate Children:**
-    `dbt build --select model.node_name+` (or `dbt run`)
-    *Builds the specified node and its direct downstream dependencies.*
+`dbt build --select model.node_name+` (or `dbt run`)
 
-    - Example: `dbt build --select model.dim_taxi_trips+`
+*Builds the specified node and its direct downstream dependencies.*
+
+- Example: `dbt build --select model.dim_taxi_trips+`
 
 **Build Nodes in a Directory:**
-    `dbt build --select models/directory_name` (or `dbt run`)
-    *Builds all nodes in the specified directory.*
-    - Example: `dbt build --select models/staging`
+`dbt build --select models/directory_name` (or `dbt run`)
 
-    `dbt build --select models/directory_name/+` (or `dbt run`)
-    *Builds all nodes in the directory and all downstream dependencies.*
-    - Example: `dbt build --select models/staging/+`
+*Builds all nodes in the specified directory.*
+
+- Example: `dbt build --select models/staging`
+
+`dbt build --select models/directory_name/+` (or `dbt run`)
+
+*Builds all nodes in the directory and all downstream dependencies.*
+- Example: `dbt build --select models/staging/+`
 
 
 **Exclude Nodes:**
-    - `dbt build --select +model.node_name --exclude model.exclude_node` (or `dbt run`)
 
-    *Builds the selected node and its dependencies, excluding the specified node.*
-    - Example: `dbt build --select +model.fct_taxi_monthly_zone_revenue --exclude model.dim_zone_lookup`
+`dbt build --select +model.node_name --exclude model.exclude_node` (or `dbt run`)
+
+*Builds the selected node and its dependencies, excluding the specified node.*
+
+- Example: `dbt build --select +model.fct_taxi_monthly_zone_revenue --exclude model.dim_zone_lookup`
 
 
