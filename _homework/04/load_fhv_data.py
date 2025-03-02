@@ -62,7 +62,7 @@ def download_fhv_data(file_name):
         return None
 
 def load_data_into_bigquery():
-    """Loads the downloaded FHV data into BigQuery using dlt."""
+    """Loads the downloaded FHV data into BigQuery using dlt ."""
     print("🚀 Starting to load data into BigQuery...")  # Signal before loading data
     
     pipeline = dlt.pipeline(
