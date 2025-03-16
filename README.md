@@ -6,6 +6,8 @@ I got hands-on experience with tools like `Docker`, `Terraform`, `Kestra`, `dbt`
 The final project really helped solidify what I learned and gave me a chance to apply it all.
 
 👩🏽‍💻 [Link to the course](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main)
+
+
 🌱 [Link to my final project: CarbonLens](https://github.com/fonsecagabriella/carbonlens/tree/main)
 
 ## Module 1: Containerization and Infrastructure as Code
