@@ -2,7 +2,7 @@
 
 The Data Engineering Zoomcamp is a free 9-week course that teaches the fundamentals of **building data pipelines**.  
 
-I got hands-on experience with tools like `Docker`, `Terraform`, `Kestra`, `dbt`, `Spar`k, and `Kafka`, learning about everything from setting up infrastructure to working with streaming data.  
+I got hands-on experience with tools like `Docker`, `Terraform`, `Kestra`, `dbt`, `Spark`, and `Kafka`, learning about everything from setting up infrastructure to working with streaming data.  
 The final project really helped solidify what I learned and gave me a chance to apply it all.
 
 👩🏽‍💻 [Link to the course](https://github.com/DataTalksClub/data-engineering-zoomcamp/tree/main)
