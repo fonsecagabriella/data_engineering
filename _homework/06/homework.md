@@ -261,7 +261,6 @@ Now we have the data in the Kafka stream. It's time to process it.
 * Which pickup and drop off locations have the longest unbroken streak of taxi trips?
 
 
-## Submitting the solutions
+<img src="../../06_streaming_processing/imgs/apache-kafta.png">
 
-- Form for submitting: https://courses.datatalks.club/de-zoomcamp-2025/homework/hw6
-- Deadline: See the website
+<img src="../../06_streaming_processing/imgs/apache-kafta-query.png">
