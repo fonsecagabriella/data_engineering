@@ -31,6 +31,10 @@ docker-compose up
 
 Visit http://localhost:8081 to see the Flink Job Manager
 
+*You will see something like this:*
+
+<img src="./../../06_streaming_processing/imgs/flink_job_manager.png">
+
 Connect to Postgres with pgcli, pg-admin, [DBeaver](https://dbeaver.io/) or any other tool.
 
 The connection credentials are:
@@ -62,16 +66,57 @@ CREATE TABLE processed_events_aggregated (
 );
 ```
 
+*NOTE: At this step, you can already create the table for question 05*:
+
+```sql
+CREATE TABLE taxi_sessions (
+    PULocationID INT,
+    DOLocationID INT,
+    session_start TIMESTAMP(3),
+    session_end TIMESTAMP(3),
+    trip_count BIGINT,
+    session_duration_minutes DOUBLE PRECISION
+);
+```
+
+*Check the tables at Postgres with `\dt`:*
+
+<img src="./../../06_streaming_processing/imgs/postgres_checktables.png">
+
+
+*You can check if the tables have the right structure with:*
+
+```
+\d processed_events
+\d processed_events_aggregated
+\d taxi_sessions
+```
+
 ## Question 1: Redpanda version
 
-Now let's find out the version of redpandas. 
+Now let's find out the version of redpandas.
 
 For that, check the output of the command `rpk help` _inside the container_. The name of the container is `redpanda-1`.
 
 Find out what you need to execute based on the `help` output.
 
 What's the version, based on the output of the command you executed? (copy the entire version)
+>> rpk version v24.2.18 (rev f9a22d4430)
 
+*Explanation:*
+
+1. First, inside the Redpand container shell:
+`docker exec -it redpanda-1 bash`
+
+2. Once inside the container, run `rpk help`
+
+3. Look through the help output for information about how to check the version
+    - It will be something like `rpk version` or `rpk --version`
+
+<img src="./../../06_streaming_processing/imgs/rpk-version.png">
+
+
+-----
 
 ## Question 2. Creating a topic
 
@@ -80,27 +125,51 @@ need to create a topic. We do it also with the `rpk`
 command we used previously for figuring out the version of 
 redpandas.
 
-Read the output of `help` and based on it, create a topic with name `green-trips` 
+Read the output of `help` and based on it, create a topic with name `green-trips`
 
 What's the output of the command for creating a topic? Include the entire output in your answer.
+>> The output is:
 
+````
+TOPIC        STATUS
+green-trips  OK
+````
+
+<img src="../../06_streaming_processing/imgs/topic-green-trips.png">
+
+---
 
 ## Question 3. Connecting to the Kafka server
 
-We need to make sure we can connect to the server, so
-later we can send some data to its topics
+We need to make sure we can connect to the server, so later we can send some data to its topics.
 
 First, let's install the kafka connector (up to you if you
 want to have a separate virtual environment for that)
 
+**Let's create a virtual environment here before proceeding**
 ```bash
-pip install kafka-python
+conda create -n kafka_env python=3.8
 ```
 
-You can start a jupyter notebook in your solution folder or
-create a script
+- Activate the env
+```bash
+conda activate kafka_env
+```
 
-Let's try to connect to our server:
+- Install packages
+```bash
+pip install kafka-python
+pip install jupyter
+```
+
+
+- Create a directory for our work at [kafta_test](../../06_streaming_processing/)
+```bash
+mkdir -p ~/kafka_test
+cd ~/kafka_test
+```
+
+- Start a jupyter notebook `jupyter notebook` and run the following:
 
 ```python
 import json
@@ -122,6 +191,12 @@ producer.bootstrap_connected()
 
 Provided that you can connect to the server, what's the output
 of the last command?
+
+>> Connection result: True
+
+<img src="./../../06_streaming_processing/imgs/kafta_test.png">
+
+---
 
 ## Question 4: Sending the Trip Data
 
@@ -166,6 +241,13 @@ took = t1 - t0
 ```
 
 How much time did it take to send the entire dataset and flush? 
+
+>> 72.55 seconds
+
+<img src="../../06_streaming_processing/imgs/kafka_flush.png">
+
+
+---
 
 
 ## Question 5: Build a Sessionization Window (2 points)
